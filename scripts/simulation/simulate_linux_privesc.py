@@ -44,18 +44,21 @@ def simulate_suid_abuse():
         log("Cleaned up fake SUID binary")
 
 def simulate_cron_abuse():
-    """Simulate cron job creation"""
+    """Simulate cron job creation in monitored directory"""
     log("=== SIMULATING CRON ABUSE ===")
-
-    cron_file = "/tmp/sim_cron_test"
+    
+    # Create in /etc/cron.d (monitored by detector)
+    cron_file = "/etc/cron.d/sim_cron_test"
+    cron_content = "* * * * * root /bin/echo 'SIMULATION_CRON_TEST'\n"
+    
     with open(cron_file, 'w') as f:
-        f.write("* * * * * root /bin/echo 'SIMULATION_CRON_TEST'\n")
-
+        f.write(cron_content)
+    
     log(f"Created fake cron file: {cron_file}")
     log("Your cron detector should fire CRITICAL alert")
-
-    time.sleep(3)
-
+    
+    time.sleep(20)  # Wait for detector to catch it
+    
     if os.path.exists(cron_file):
         os.remove(cron_file)
         log("Cleaned up fake cron file")

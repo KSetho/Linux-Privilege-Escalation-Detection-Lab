@@ -18,6 +18,7 @@ class Colors:
     GREEN = '\033[92m'
     CYAN = '\033[96m'
     MAGENTA = '\033[95m'
+    WHITE = '\033[97m'      # <-- ADD THIS LINE
     END = '\033[0m'
 
 def print_header():
